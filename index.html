@@ -214,7 +214,7 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   .cheat{padding:18px 16px}
   .naughty{padding:16px}
   .grid{gap:30px 0}
-  .ws{padding-top:44px}
+  .ws{padding-top:76px}
   .toolbar{padding-top:26px}
 }
 
@@ -229,8 +229,10 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 .elf-hammer{transform-origin:66px 60px;animation:hit .9s ease-in-out infinite}
 @keyframes hit{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(16deg)}}
 .spark{animation:tw .9s ease-in-out infinite}
+.theme{position:absolute;top:24px;right:max(14px,env(safe-area-inset-right,0px));z-index:3;width:46px;height:46px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:var(--sky-ink);font-size:1.3rem;line-height:1;cursor:pointer}
+@media (hover:hover){.theme:hover{background:rgba(255,255,255,.28)}}
 @media (max-width:760px){
-  .hero{grid-template-columns:1fr;padding-top:48px}
+  .hero{grid-template-columns:1fr;padding-top:76px}
   .hero-text{padding-bottom:8px}
   .scene{justify-self:center}
   .phead{align-items:flex-start}
@@ -247,6 +249,7 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   <canvas id="snow" aria-hidden="true"></canvas>
   <div class="stars" id="stars" aria-hidden="true"></div>
   <div class="lights" id="lights" aria-hidden="true"></div>
+  <button class="theme" id="themeBtn" type="button" aria-label="Switch to dark mode">🌙</button>
   <div class="wrap sky-inner" id="skyInner"></div>
 </header>
 <div class="cane" aria-hidden="true"></div>
@@ -545,6 +548,22 @@ function enter(e, el){
 document.addEventListener('keydown', function(e){
   if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('.door-hit')) { e.preventDefault(); enter(e, e.target); }
 });
+
+/* ---------- Light / dark toggle ---------- */
+(function(){
+  var root = document.documentElement, btn = $('#themeBtn'), mq = window.matchMedia && matchMedia('(prefers-color-scheme: dark)');
+  function eff(){ var t = root.getAttribute('data-theme'); return t || (mq && mq.matches ? 'dark' : 'light'); }
+  function paint(){ var d = eff() === 'dark'; btn.textContent = d ? '☀️' : '🌙'; btn.setAttribute('aria-label', d ? 'Switch to light mode' : 'Switch to dark mode'); }
+  try { var sv = localStorage.getItem('ssg-theme'); if (sv === 'light' || sv === 'dark') root.setAttribute('data-theme', sv); } catch (e) {}
+  btn.addEventListener('click', function(){
+    var n = eff() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', n);
+    try { localStorage.setItem('ssg-theme', n); } catch (e) {}
+    paint();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', paint);
+  paint();
+})();
 
 /* ---------- Atmosphere: stars, lights, snow (all decorative) ---------- */
 (function(){
