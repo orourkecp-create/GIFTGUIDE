@@ -326,12 +326,26 @@ var PEOPLE = [
     tags:['Sports','Food','Museums'] },
   { id:'ashley', name:'Ashley', hue:'green', tbd:true, tags:['TBD'] },
   { id:'gordon', name:'Gordon', hue:'gold', tbd:true, tags:['TBD'] },
-  { id:'mk', name:'MK', hue:'red', tbd:true, tags:['TBD'] }
+  { id:'mk', name:'MK', hue:'red',
+    sizes:[['Shoes','8'],['Shirt','S / 2-4'],['Bottoms','4 / S-M'],['Glove','M'],['Belt','Small'],['Purse','Mini / small'],['Jewelry','Gold']],
+    wish:[{t:'Pedicure', k:'splurge'},{t:'Home luxuries', k:'splurge'},{t:'Hair care', k:'splurge'},{t:'Dog enrichment', k:'interest'},{t:'Kindle', k:'interest'}],
+    into:['cooking/bread baking','reading','crochet','candle making'],
+    exps:[{t:'Facials and massage', n:'Wellness is a favorite. Listed as something they won’t buy themselves.'},{t:'Concerts', n:''},{t:'Orangetheory / ClassPass', n:''},{t:'Cooking or pottery class', n:'Listed as a creative outlet: “cooking or pottery class vibes”.'}],
+    fav:[
+      {g:'Music & entertainment', i:'🎧', items:[{t:'New York spankies'},{t:'Girl pop music'}]},
+      {g:'Stores & brands', i:'🛍️', items:[{t:'Whole Foods'},{t:'Chewy'},{t:'Sephora'},{t:'Michael’s'},{t:'Revolve'},{t:'Etsy'},{t:'Anthropologie'},{t:'Free People'}]},
+      {g:'Drinks', i:'🧋', items:[{t:'Fun flavored iced tea'},{t:'Coffee'}]},
+      {g:'Food spots', i:'🥯', items:[{t:'Secret Kitchen', n:'JC'},{t:'Razza', n:'JC'},{t:'Bob White', n:'JC'},{t:'B-Bagels', n:'JC'}]}
+    ],
+    interests:['Cooking/bread baking','Reading','Crochet','Candle making','Dru toys','My future niece'],
+    avoid:['Liquor','Mugs','Bread cutting','Aprons','Cookbooks'], avoidQuote:'',
+    tags:['Cooking & baking','Crochet','Wellness'] }
 ];
 
 /* ---------- Helpers ---------- */
 var $ = function(s, r){ return (r || document).querySelector(s); };
 var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+var lc1 = function(t){ return (/^[A-Z][a-z]/.test(t) && !/[A-Z]/.test(t.slice(1))) ? t.charAt(0).toLowerCase() + t.slice(1) : t; };
 var list = function(a){ return a.length < 3 ? a.join(' and ') : a.slice(0,-1).join(', ') + ' and ' + a[a.length-1]; };
 var BOW = '<svg class="bow" viewBox="0 0 60 36" aria-hidden="true"><path d="M30 22C14 2 2 10 8 22c4 8 16 6 22 0Z"/><path d="M30 22C46 2 58 10 52 22c-4 8-16 6-22 0Z"/><path d="M27 26 18 36l8-2ZM33 26l9 10-8-2Z"/><circle cx="30" cy="22" r="6"/></svg>';
 
@@ -399,11 +413,11 @@ function cheatHTML(p){
   var b = [];
   if (p.into.length) b.push(esc(p.name) + ' is into <b>' + esc(list(p.into)) + '</b>.');
   if (p.wish.length) b.push('On the wishlist: <b>' + esc(list(p.wish.map(function(w){ return w.t; }))) + '</b>.');
-  if (p.exps.length) b.push('Experience ideas: <b>' + esc(list(p.exps.map(function(e){ return e.t.toLowerCase(); }))) + '</b>.');
+  if (p.exps.length) b.push('Experience ideas: <b>' + esc(list(p.exps.map(function(e){ return lc1(e.t); }))) + '</b>.');
   b.push('Sizes: ' + p.sizes.map(function(s){ return esc(s[0].toLowerCase()) + ' <b>' + esc(s[1]) + '</b>'; }).join(', ') + '.');
   var stores = p.fav.filter(function(f){ return f.g === 'Stores & brands'; })[0];
   if (stores) b.push('Shops at <b>' + esc(stores.items.map(function(i){ return i.t; }).join(', ')) + '</b>.');
-  if (p.avoid.length) b.push('Definitely skip <b>' + esc(list(p.avoid.map(function(a){ return a.toLowerCase(); }))) + '</b>.');
+  if (p.avoid.length) b.push('Definitely skip <b>' + esc(list(p.avoid.map(function(a){ return lc1(a); }))) + '</b>.');
   return b.join(' ');
 }
 function head(ico, title, note){
