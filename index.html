@@ -52,7 +52,7 @@ h1,h2,h3{text-wrap:balance}
 .sky canvas,.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .star{position:absolute;border-radius:50%;background:#FFF1BF;animation:tw 3.4s ease-in-out infinite}
 @keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
-.lights{position:absolute;top:0;left:0;right:76px;z-index:2;display:flex;justify-content:space-around;padding-inline:6px;pointer-events:none}
+.lights{position:relative;flex:1;min-width:0;height:100%;overflow:hidden;z-index:2;display:flex;justify-content:space-around;padding-inline:6px;pointer-events:none}
 .lights::before{content:"";position:absolute;left:0;right:0;top:5px;height:2px;background:#07150E}
 .lights i{position:relative;margin-top:7px;width:9px;height:13px;border-radius:50% 50% 50% 50%/55% 55% 45% 45%;background:var(--art-red);box-shadow:0 0 10px 2px var(--art-red);animation:tw 2.4s ease-in-out infinite}
 .lights i:nth-child(4n+2){background:var(--art-gold);box-shadow:0 0 10px 2px var(--art-gold);animation-delay:.6s}
@@ -229,19 +229,32 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 .elf-hammer{transform-origin:66px 60px;animation:hit .9s ease-in-out infinite}
 @keyframes hit{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(16deg)}}
 .spark{animation:tw .9s ease-in-out infinite}
-.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;height:52px;background:var(--sky-top);border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
-.plugwrap{position:absolute;top:0;bottom:0;right:max(8px,env(safe-area-inset-right,0px));z-index:3;display:flex;align-items:center;gap:2px}
+.strip{display:flex;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;height:52px;background:var(--sky-top);border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.plugwrap{flex:none;height:100%;margin-right:max(8px,env(safe-area-inset-right,0px));z-index:3;display:flex;align-items:center;gap:2px}
 .plublab{font-size:1.2rem;line-height:1;color:var(--art-gold);white-space:nowrap}
 .plug{width:62px;height:50px;padding:2px;border:0;background:transparent;cursor:pointer;display:block}
 .plug svg{width:100%;height:100%;overflow:visible;display:block}
 .plugbody{transform-box:fill-box;transform-origin:right center;transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
-.plug:not(.on) .plugbody{transform:translateX(-20px) rotate(-7deg)}
-@media (hover:hover){.plug:not(.on):hover .plugbody{transform:translateX(-13px) rotate(-4deg)}}
+.plug:not(.on) .plugbody{transform:translateX(-12px) rotate(-6deg)}
+@media (hover:hover){.plug:not(.on):hover .plugbody{transform:translateX(-8px) rotate(-3deg)}}
 :root[data-lights="off"] .lights i{animation:none;background:#7C8A82;box-shadow:none;opacity:.7}
 :root[data-lights="off"] .bulb{animation:none;opacity:.3}
 .lights i{margin-top:6px}
-@media (min-width:520px){.lights{right:200px}}
-@media (max-width:519px){.plublab{display:none}}
+@media (max-width:519px){.plublab{display:none}.lights i:nth-child(n+21){display:none}}
+.mus{flex:none;width:46px;height:46px;margin:0 6px 0 max(8px,env(safe-area-inset-left,0px));display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:var(--sky-ink);font-size:1.25rem;line-height:1;cursor:pointer}
+.mus svg{width:34px;height:34px;display:block;overflow:visible}
+.mus.on{border-color:var(--art-gold);background:rgba(232,185,62,.22)}
+.mlid{transform-box:fill-box;transform-origin:left bottom;transition:transform .35s ease}
+.mus.on .mlid{transform:rotate(-20deg)}
+.mdancer,.mnote{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity .3s}
+.mus.on .mdancer{opacity:1;animation:pir 1.3s ease-in-out infinite}
+.mus.on .mnote{animation:fnote 2.2s ease-in-out infinite}
+.mcrank{transform-box:fill-box;transform-origin:center}
+.mus.on .mcrank{animation:crank 1.4s linear infinite}
+@keyframes pir{0%,100%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
+@keyframes fnote{0%{opacity:0;transform:translateY(4px)}30%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+@keyframes crank{to{transform:rotate(360deg)}}
+@media (hover:hover){.mus:not(.on):hover{background:rgba(255,255,255,.26)}}
 @media (max-width:760px){
   .hero{grid-template-columns:1fr;padding-top:28px}
   .hero-text{padding-bottom:8px}
@@ -257,11 +270,12 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 </head>
 <body>
 <div class="strip" id="strip">
+  <button class="mus" id="musBtn" type="button" aria-pressed="false" aria-label="Play Christmas music"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><g class="mdancer"><circle cx="20" cy="8" r="2.6" fill="#F2C9A0"/><path d="M20 11L14.5 19H25.5Z" fill="#F7A8C4"/></g><rect x="5" y="19" width="30" height="16" rx="3" fill="#8A5A32"/><rect x="5" y="19" width="30" height="3.5" fill="#6B4226"/><path d="M35 29H37.5" stroke="var(--art-gold)" stroke-width="2" stroke-linecap="round"/><g class="mcrank"><circle cx="38.5" cy="25.5" r="2.4" fill="var(--art-gold)"/></g><g class="mlid"><rect x="3" y="14" width="34" height="7" rx="2" fill="#B07A45"/><circle cx="20" cy="21" r="1.8" fill="var(--art-gold)"/></g><g class="mnote"><path d="M30 12V5L34 4" fill="none" stroke="var(--art-gold)" stroke-width="1.6" stroke-linecap="round"/><circle cx="28.6" cy="12.4" r="2.2" fill="var(--art-gold)"/></g></svg></button>
   <div class="lights" id="lights" aria-hidden="true"></div>
   <div class="plugwrap"><span class="plublab hand" id="themeLab" aria-hidden="true">Plug in the lights</span>
     <button class="plug" id="themeBtn" type="button" aria-pressed="false" aria-label="Plug in the lights for night mode">
       <svg viewBox="0 0 64 56" aria-hidden="true" focusable="false"><rect x="34" y="6" width="26" height="44" rx="6" fill="var(--art-cream)" stroke="#CBBF9F" stroke-width="2"/><rect x="38" y="16" width="12" height="4" rx="1" fill="#4A3F2A"/><rect x="38" y="32" width="12" height="4" rx="1" fill="#4A3F2A"/>
-        <g class="plugbody"><path d="M2 28C-8 28-8 0-24 0" fill="none" stroke="#0B1A12" stroke-width="3" stroke-linecap="round"/><rect x="2" y="10" width="24" height="36" rx="7" fill="var(--art-red)"/><rect x="26" y="16" width="14" height="4" rx="1" fill="#C9CED2"/><rect x="26" y="32" width="14" height="4" rx="1" fill="#C9CED2"/><path d="M8 20V36M14 20V36" stroke="rgba(0,0,0,.25)" stroke-width="2" stroke-linecap="round"/></g></svg>
+        <g class="plugbody"><path d="M2 28C-5 28-5 0-12 0" fill="none" stroke="#0B1A12" stroke-width="3" stroke-linecap="round"/><rect x="2" y="10" width="24" height="36" rx="7" fill="var(--art-red)"/><rect x="26" y="16" width="14" height="4" rx="1" fill="#C9CED2"/><rect x="26" y="32" width="14" height="4" rx="1" fill="#C9CED2"/><path d="M8 20V36M14 20V36" stroke="rgba(0,0,0,.25)" stroke-width="2" stroke-linecap="round"/></g></svg>
     </button></div>
 </div>
 <header class="sky" id="sky">
@@ -573,6 +587,7 @@ var entering = false;
 function enter(e, el){
   if (entering) return;
   entering = true;
+  Music.startIfAllowed();
   var svg = $('.ws-scene'); if (svg) svg.classList.add('opening');
   burst(e, el);
   setTimeout(function(){ entering = false; go('home'); }, REDUCE ? 0 : 850);
@@ -580,6 +595,76 @@ function enter(e, el){
 document.addEventListener('keydown', function(e){
   if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('.door-hit')) { e.preventDefault(); enter(e, e.target); }
 });
+
+/* ---------- Background music: traditional carols (public domain), synthesized in the browser ---------- */
+var Music = (function(){
+  var ctx = null, master = null, on = false, nextAt = 0, idx = 0, timer = 0, btn = $('#musBtn');
+  var F = {G3:196, A3:220, B3:246.94, C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25, F5:698.46};
+  function P(bpm, str){ return { bpm: bpm, n: str.split(' ').map(function(x){ var a = x.split(':'); return [a[0], parseFloat(a[1])]; }) }; }
+  var TUNES = [
+    P(148, 'E4:1 E4:1 E4:2 E4:1 E4:1 E4:2 E4:1 G4:1 C4:1.5 D4:.5 E4:4 F4:1 F4:1 F4:1.5 F4:.5 F4:1 E4:1 E4:1 E4:.5 E4:.5 G4:1 G4:1 F4:1 D4:1 C4:4'),
+    P(70, 'G4:1.5 A4:.5 G4:1 E4:3 G4:1.5 A4:.5 G4:1 E4:3 D5:2 D5:1 B4:3 C5:2 C5:1 G4:3 A4:2 A4:1 C5:1.5 B4:.5 A4:1 G4:1.5 A4:.5 G4:1 E4:3 A4:2 A4:1 C5:1.5 B4:.5 A4:1 G4:1.5 A4:.5 G4:1 E4:3 D5:2 D5:1 F5:1.5 D5:.5 B4:1 C5:3 E5:3 C5:1 G4:1 E4:1 G4:1.5 F4:.5 D4:1 C4:3'),
+    P(132, 'G3:1 C4:1 C4:.5 D4:.5 C4:.5 B3:.5 A3:1 A3:1 A3:1 D4:1 D4:.5 E4:.5 D4:.5 C4:.5 B3:1 G3:1 G3:1 E4:1 E4:.5 F4:.5 E4:.5 D4:.5 C4:1 A3:1 G3:.5 G3:.5 A3:1 D4:1 B3:1 C4:3')
+  ];
+  function paint(){
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Mute Christmas music' : 'Play Christmas music');
+  }
+  function note(f, t, d){
+    var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = f * 2;
+    o2.type = 'sine'; o2.frequency.value = f * 4; g2.gain.value = 0.12;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.5, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(d, 0.3) + 0.9);
+    o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+    o.start(t); o2.start(t); o.stop(t + d + 1.1); o2.stop(t + d + 1.1);
+  }
+  function sched(){
+    var tune = TUNES[idx % TUNES.length]; idx++;
+    var spb = 60 / tune.bpm, t = Math.max(nextAt, ctx.currentTime + 0.1);
+    tune.n.forEach(function(q){ note(F[q[0]], t, q[1] * spb * 0.95); t += q[1] * spb; });
+    nextAt = t + 1.8;
+  }
+  function build(AC){
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = 0.17;
+    var dl = ctx.createDelay(); dl.delayTime.value = 0.32;
+    var fb = ctx.createGain(); fb.gain.value = 0.3;
+    dl.connect(fb); fb.connect(dl);
+    master.connect(ctx.destination); master.connect(dl); dl.connect(ctx.destination);
+    timer = setInterval(function(){ if (on && nextAt - ctx.currentTime < 3) sched(); }, 400);
+    sched();
+  }
+  function start(){
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      if (!ctx) build(AC); else ctx.resume();
+      on = true;
+      try { localStorage.removeItem('ssg-music'); } catch (e) {}
+    } catch (e) { on = false; }
+    paint();
+  }
+  function stop(){
+    if (ctx) { try { ctx.suspend(); } catch (e) {} }
+    on = false;
+    try { localStorage.setItem('ssg-music', 'off'); } catch (e) {}
+    paint();
+  }
+  btn.addEventListener('click', function(){ if (on) stop(); else start(); });
+  document.addEventListener('visibilitychange', function(){
+    if (!ctx || !on) return;
+    try { if (document.hidden) ctx.suspend(); else ctx.resume(); } catch (e) {}
+  });
+  return {
+    startIfAllowed: function(){
+      var m = null; try { m = localStorage.getItem('ssg-music'); } catch (e) {}
+      if (m !== 'off' && !on) start();
+    }
+  };
+})();
 
 /* ---------- Plug-in lights = night mode, unplugged = day mode ---------- */
 (function(){
