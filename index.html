@@ -217,6 +217,18 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   .ws{padding-top:44px}
   .toolbar{padding-top:26px}
 }
+
+.elfbox{margin-top:14px;padding:10px 10px 12px;border-radius:12px;background:var(--surface-2);text-align:center}
+.elf{display:block;width:100%;max-width:190px;height:auto;margin:0 auto}
+.tbdnote{font-family:var(--font-hand);font-size:1.35rem;line-height:1.1;color:var(--red-ink);margin-top:2px}
+.tbdp{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding-block:34px}
+.tbdp h2{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,6vw,2.8rem);line-height:1.05;max-width:16em}
+.tbdp .elf{max-width:300px}
+.tbdp .hand{font-size:2.4rem;color:var(--red-ink)}
+.tbdp p:last-child{max-width:34em;color:var(--muted)}
+.elf-hammer{transform-origin:66px 60px;animation:hit .9s ease-in-out infinite}
+@keyframes hit{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(16deg)}}
+.spark{animation:tw .9s ease-in-out infinite}
 @media (max-width:760px){
   .hero{grid-template-columns:1fr;padding-top:48px}
   .hero-text{padding-bottom:8px}
@@ -290,7 +302,10 @@ var PEOPLE = [
     ],
     interests:['Sports','Food'],
     avoid:['Hats'], avoidQuote:'',
-    tags:['Sports','Food','Museums'] }
+    tags:['Sports','Food','Museums'] },
+  { id:'ashley', name:'Ashley', hue:'green', tbd:true, tags:['TBD'] },
+  { id:'gordon', name:'Gordon', hue:'gold', tbd:true, tags:['TBD'] },
+  { id:'mk', name:'MK', hue:'red', tbd:true, tags:['TBD'] }
 ];
 
 /* ---------- Helpers ---------- */
@@ -320,6 +335,16 @@ var SCENE = '<svg class="scene" viewBox="0 0 560 300" role="img" aria-label="A d
  + '<circle cx="512" cy="244" r="10" fill="#C48A4A"/><circle cx="508" cy="241" r="1.8" fill="#6B3F26"/><circle cx="515" cy="246" r="1.8" fill="#6B3F26"/><circle cx="510" cy="248" r="1.8" fill="#6B3F26"/>'
  + '</svg>';
 
+var ELF = '<svg class="elf" viewBox="0 0 160 120" role="img" aria-label="An elf hammering away at a workbench next to a half-wrapped present">'
+ + '<path d="M34 90L40 54H62L68 90Z" fill="var(--art-green)"/><rect x="38" y="72" width="26" height="4" fill="var(--art-gold)"/>'
+ + '<path d="M40 44L29 37L41 50ZM62 44L73 37L61 50Z" fill="#F2C9A0"/><circle cx="51" cy="44" r="11" fill="#F2C9A0"/>'
+ + '<circle cx="47" cy="44" r="1.7" fill="#2B1B10"/><circle cx="55" cy="44" r="1.7" fill="#2B1B10"/><path d="M47 49Q51 53 55 49" fill="none" stroke="#2B1B10" stroke-width="1.5" stroke-linecap="round"/>'
+ + '<path d="M40 38Q51 6 80 22Q62 22 62 38Z" fill="var(--art-red)"/><rect x="39" y="34" width="24" height="6" rx="3" fill="var(--art-snow)"/><circle cx="80" cy="22" r="5" fill="var(--art-snow)"/>'
+ + '<rect x="10" y="88" width="140" height="10" rx="3" fill="#7A4325"/><rect x="20" y="98" width="8" height="20" fill="#5E3219"/><rect x="132" y="98" width="8" height="20" fill="#5E3219"/>'
+ + '<rect x="92" y="66" width="36" height="22" fill="var(--art-red)"/><rect x="106" y="66" width="8" height="22" fill="var(--art-gold)"/><ellipse cx="104" cy="63" rx="7" ry="4" fill="var(--art-gold)"/><ellipse cx="116" cy="63" rx="7" ry="4" fill="var(--art-gold)"/>'
+ + '<g class="elf-hammer"><path d="M66 60L88 62" stroke="var(--art-green)" stroke-width="7" stroke-linecap="round"/><path d="M88 62L98 46" stroke="#6B4226" stroke-width="3.5" stroke-linecap="round"/><rect x="92" y="38" width="16" height="9" rx="2" fill="#8A949A" transform="rotate(-30 100 42)"/></g>'
+ + '<circle class="spark" cx="112" cy="54" r="2.5" fill="var(--art-gold)"/><circle class="spark" cx="120" cy="48" r="2" fill="var(--art-snow)" style="animation-delay:.3s"/><circle class="spark" cx="106" cy="46" r="1.8" fill="var(--art-gold)" style="animation-delay:.6s"/></svg>';
+
 /* ---------- Views ---------- */
 function homeSky(){
   return '<div class="hero"><div class="hero-text"><button class="back" type="button" data-go="workshop">← Back to the workshop</button>'
@@ -332,9 +357,10 @@ function cardHTML(p){
   return '<article class="gift hue-' + p.hue + '" data-go="' + p.id + '">'
     + '<div class="lid">' + BOW + '</div>'
     + '<div class="who"><div class="orn hue-' + p.hue + '" aria-hidden="true">' + esc(p.name.charAt(0)) + '</div>'
-    + '<div><h3>' + esc(p.name) + '</h3><span class="stamp">✓ Nice List Approved</span></div></div>'
+    + '<div><h3>' + esc(p.name) + '</h3><span class="stamp">' + (p.tbd ? '⏳ Still being wrapped' : '✓ Nice List Approved') + '</span></div></div>'
+    + (p.tbd ? '<div class="elfbox">' + ELF + '<p class="tbdnote">TBD · the elves are on it</p></div>' : '')
     + '<div class="tags">' + p.tags.map(function(t){ return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>'
-    + '<button class="btn" type="button" data-go="' + p.id + '" aria-label="Open ' + esc(p.name) + '’s gift guide">Open Their Gift Guide 🎁</button>'
+    + '<button class="btn" type="button" data-go="' + p.id + '" aria-label="Open ' + esc(p.name) + '’s gift guide">' + (p.tbd ? 'Peek inside 🧝' : 'Open Their Gift Guide 🎁') + '</button>'
     + '</article>';
 }
 function homeMain(){
@@ -366,12 +392,16 @@ function profileSky(p){
   return '<div class="psky"><button class="back" type="button" data-go="home">← All participants</button>'
     + '<div class="phead"><div class="orn lg hue-' + p.hue + '" aria-hidden="true">' + esc(p.name.charAt(0)) + '</div>'
     + '<div class="meta"><span class="eyebrow">Official North Pole Shopping File</span><h1 tabindex="-1">' + esc(p.name) + '’s Gift Guide</h1>'
-    + '<span class="hand">Nice List Approved ✓</span></div></div></div>';
+    + '<span class="hand">' + (p.tbd ? 'Waiting on the elves…' : 'Nice List Approved ✓') + '</span></div></div></div>';
 }
 function profileMain(p){
   var h = '';
   h += '<nav class="switch" aria-label="Other gift guides"><span class="lbl">Guides</span>'
     + PEOPLE.map(function(o){ return '<button class="pill" type="button" data-go="' + o.id + '"' + (o.id === p.id ? ' aria-current="true"' : '') + '>' + esc(o.name) + '</button>'; }).join('') + '</nav>';
+  if (p.tbd) {
+    return h + '<section class="block tbdp"><h2>' + esc(p.name) + '’s file is still being wrapped</h2>' + ELF
+      + '<p class="hand">TBD</p><p>The elves are waiting on ' + esc(p.name) + '’s questionnaire. Sizes, wishlist and favorites will show up here as soon as it’s in.</p></section>';
+  }
   h += '<section class="block" id="sec-sizes">' + head('👕', 'Sizes', 'No more pretending you didn’t know their size.')
     + '<div class="sizes">' + p.sizes.map(function(s){ return '<div class="size"><div class="k">' + esc(s[0]) + '</div><div class="v">' + esc(s[1]) + '</div></div>'; }).join('') + '</div></section>';
   h += '<section class="cheat" aria-labelledby="cs"><span class="kick">Gift Intelligence Report</span><h2 id="cs">Santa’s Cheat Sheet 🎅</h2><p>' + cheatHTML(p) + '</p>'
@@ -408,8 +438,8 @@ function route(id, force){
   else if (key === 'home') { $('#skyInner').innerHTML = homeSky(); $('#main').innerHTML = homeMain(); fillGrid(''); document.title = 'Secret Santa Gift Guide'; }
   else { $('#skyInner').innerHTML = workshopSky(); $('#main').innerHTML = workshopMain(); document.title = 'Secret Santa Gift Guide'; }
   var dock = $('#dock');
-  document.body.classList.toggle('has-dock', !!p);
-  if (p) {
+  document.body.classList.toggle('has-dock', !!(p && !p.tbd));
+  if (p && !p.tbd) {
     var b = '<button type="button" data-go="home"><b>←</b>All</button>';
     [['sec-sizes','👕','Sizes'],['sec-wish','🎁','Wishlist'],['sec-skip','🚫','Skip'],['sec-favs','❤️','Faves']].forEach(function(j){
       if ($('#' + j[0])) b += '<button type="button" data-jump="' + j[0] + '"><b>' + j[1] + '</b>' + j[2] + '</button>';
