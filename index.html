@@ -52,7 +52,7 @@ h1,h2,h3{text-wrap:balance}
 .sky canvas,.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .star{position:absolute;border-radius:50%;background:#FFF1BF;animation:tw 3.4s ease-in-out infinite}
 @keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
-.lights{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:space-around;padding-inline:6px;pointer-events:none}
+.lights{position:absolute;top:0;left:0;right:76px;z-index:2;display:flex;justify-content:space-around;padding-inline:6px;pointer-events:none}
 .lights::before{content:"";position:absolute;left:0;right:0;top:5px;height:2px;background:#07150E}
 .lights i{position:relative;margin-top:7px;width:9px;height:13px;border-radius:50% 50% 50% 50%/55% 55% 45% 45%;background:var(--art-red);box-shadow:0 0 10px 2px var(--art-red);animation:tw 2.4s ease-in-out infinite}
 .lights i:nth-child(4n+2){background:var(--art-gold);box-shadow:0 0 10px 2px var(--art-gold);animation-delay:.6s}
@@ -61,14 +61,14 @@ h1,h2,h3{text-wrap:balance}
 .sky-inner{position:relative;z-index:1}
 .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--art-gold)}
 
-.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:8px 28px;align-items:end;padding-top:52px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:8px 28px;align-items:end;padding-top:30px}
 .hero-text{padding-bottom:44px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .hero h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.6rem,7.4vw,4.5rem);line-height:1.02}
 .hero .sub{font-size:1.12rem;max-width:34em;color:var(--sky-mute)}
 .hand{font-family:var(--font-hand);font-size:1.6rem;line-height:1.1;color:var(--art-gold)}
 .scene{display:block;width:100%;max-width:560px;height:auto;justify-self:end;margin-bottom:-1px}
 
-.psky{padding-top:50px;padding-bottom:30px;display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.psky{padding-top:26px;padding-bottom:30px;display:flex;flex-direction:column;gap:20px;align-items:flex-start}
 .back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:var(--sky-ink);cursor:pointer;font-weight:600}
 @media (hover:hover){.back:hover{background:rgba(255,255,255,.2)}}
 .phead{display:flex;gap:18px;align-items:center;min-width:0}
@@ -172,7 +172,7 @@ h1,h2,h3{text-wrap:balance}
 .hero-text .back{align-self:flex-start}
 .pop{position:fixed;z-index:50;pointer-events:none;font-size:1.5rem;animation:pop .95s ease-out forwards}
 @keyframes pop{from{transform:translate(0,0) scale(.4);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(1.1) rotate(var(--r));opacity:0}}
-.ws{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding-top:56px}
+.ws{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding-top:32px}
 .ws h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.7rem,9vw,5rem);line-height:1;max-width:14em}
 .ws .sub{max-width:32em;color:var(--sky-mute);font-size:1.12rem}
 .ws-scene{display:block;width:100%;max-width:780px;height:auto;margin-top:6px;margin-bottom:-1px}
@@ -214,7 +214,7 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   .cheat{padding:18px 16px}
   .naughty{padding:16px}
   .grid{gap:30px 0}
-  .ws{padding-top:76px}
+  .ws{padding-top:30px}
   .toolbar{padding-top:26px}
 }
 
@@ -229,17 +229,21 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 .elf-hammer{transform-origin:66px 60px;animation:hit .9s ease-in-out infinite}
 @keyframes hit{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(16deg)}}
 .spark{animation:tw .9s ease-in-out infinite}
-.plugwrap{position:absolute;top:22px;right:max(10px,env(safe-area-inset-right,0px));z-index:3;display:flex;align-items:center;gap:2px}
-.plublab{font-size:1.3rem;line-height:1;color:var(--art-gold);white-space:nowrap}
-.plug{width:84px;height:64px;padding:4px;border:0;background:transparent;cursor:pointer;display:block}
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;height:52px;background:var(--sky-top);border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.plugwrap{position:absolute;top:0;bottom:0;right:max(8px,env(safe-area-inset-right,0px));z-index:3;display:flex;align-items:center;gap:2px}
+.plublab{font-size:1.2rem;line-height:1;color:var(--art-gold);white-space:nowrap}
+.plug{width:62px;height:50px;padding:2px;border:0;background:transparent;cursor:pointer;display:block}
 .plug svg{width:100%;height:100%;overflow:visible;display:block}
 .plugbody{transform-box:fill-box;transform-origin:right center;transition:transform .4s cubic-bezier(.3,1.6,.5,1)}
 .plug:not(.on) .plugbody{transform:translateX(-20px) rotate(-7deg)}
 @media (hover:hover){.plug:not(.on):hover .plugbody{transform:translateX(-13px) rotate(-4deg)}}
 :root[data-lights="off"] .lights i{animation:none;background:#7C8A82;box-shadow:none;opacity:.7}
 :root[data-lights="off"] .bulb{animation:none;opacity:.3}
+.lights i{margin-top:6px}
+@media (min-width:520px){.lights{right:200px}}
+@media (max-width:519px){.plublab{display:none}}
 @media (max-width:760px){
-  .hero{grid-template-columns:1fr;padding-top:76px}
+  .hero{grid-template-columns:1fr;padding-top:28px}
   .hero-text{padding-bottom:8px}
   .scene{justify-self:center}
   .phead{align-items:flex-start}
@@ -252,15 +256,18 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 
 </head>
 <body>
-<header class="sky" id="sky">
-  <canvas id="snow" aria-hidden="true"></canvas>
-  <div class="stars" id="stars" aria-hidden="true"></div>
+<div class="strip" id="strip">
   <div class="lights" id="lights" aria-hidden="true"></div>
   <div class="plugwrap"><span class="plublab hand" id="themeLab" aria-hidden="true">Plug in the lights</span>
     <button class="plug" id="themeBtn" type="button" aria-pressed="false" aria-label="Plug in the lights for night mode">
       <svg viewBox="0 0 64 56" aria-hidden="true" focusable="false"><rect x="34" y="6" width="26" height="44" rx="6" fill="var(--art-cream)" stroke="#CBBF9F" stroke-width="2"/><rect x="38" y="16" width="12" height="4" rx="1" fill="#4A3F2A"/><rect x="38" y="32" width="12" height="4" rx="1" fill="#4A3F2A"/>
-        <g class="plugbody"><path d="M2 28C-14 28-2-18-26-18" fill="none" stroke="#0B1A12" stroke-width="3" stroke-linecap="round"/><rect x="2" y="10" width="24" height="36" rx="7" fill="var(--art-red)"/><rect x="26" y="16" width="14" height="4" rx="1" fill="#C9CED2"/><rect x="26" y="32" width="14" height="4" rx="1" fill="#C9CED2"/><path d="M8 20V36M14 20V36" stroke="rgba(0,0,0,.25)" stroke-width="2" stroke-linecap="round"/></g></svg>
+        <g class="plugbody"><path d="M2 28C-8 28-8 0-24 0" fill="none" stroke="#0B1A12" stroke-width="3" stroke-linecap="round"/><rect x="2" y="10" width="24" height="36" rx="7" fill="var(--art-red)"/><rect x="26" y="16" width="14" height="4" rx="1" fill="#C9CED2"/><rect x="26" y="32" width="14" height="4" rx="1" fill="#C9CED2"/><path d="M8 20V36M14 20V36" stroke="rgba(0,0,0,.25)" stroke-width="2" stroke-linecap="round"/></g></svg>
     </button></div>
+</div>
+<header class="sky" id="sky">
+  <canvas id="snow" aria-hidden="true"></canvas>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  
   <div class="wrap sky-inner" id="skyInner"></div>
 </header>
 <div class="cane" aria-hidden="true"></div>
