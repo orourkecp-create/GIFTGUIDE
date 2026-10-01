@@ -241,9 +241,12 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 :root[data-lights="off"] .bulb{animation:none;opacity:.3}
 .lights i{margin-top:6px}
 @media (max-width:519px){.plublab{display:none}.lights i:nth-child(n+21){display:none}}
-.mus{flex:none;width:46px;height:46px;margin:0 6px 0 max(8px,env(safe-area-inset-left,0px));display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:var(--sky-ink);font-size:1.25rem;line-height:1;cursor:pointer}
-.mus svg{width:34px;height:34px;display:block;overflow:visible}
-.mus.on{border-color:var(--art-gold);background:rgba(232,185,62,.22)}
+.musicwrap{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:22px}
+.mus{width:128px;height:128px;padding:6px;display:block;border:0;background:transparent;color:inherit;cursor:pointer;border-radius:20px}
+.mus svg{width:100%;height:100%;display:block;overflow:visible}
+.musiclab{font-size:1.5rem;line-height:1.1;color:var(--red-ink)}
+@media (hover:hover){.mus:hover svg{transform:scale(1.06)}}
+.mus svg{transition:transform .2s ease}
 .mlid{transform-box:fill-box;transform-origin:left bottom;transition:transform .35s ease}
 .mus.on .mlid{transform:rotate(-20deg)}
 .mdancer,.mnote{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity .3s}
@@ -270,7 +273,7 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
 </head>
 <body>
 <div class="strip" id="strip">
-  <button class="mus" id="musBtn" type="button" aria-pressed="false" aria-label="Play Christmas music"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><g class="mdancer"><circle cx="20" cy="8" r="2.6" fill="#F2C9A0"/><path d="M20 11L14.5 19H25.5Z" fill="#F7A8C4"/></g><rect x="5" y="19" width="30" height="16" rx="3" fill="#8A5A32"/><rect x="5" y="19" width="30" height="3.5" fill="#6B4226"/><path d="M35 29H37.5" stroke="var(--art-gold)" stroke-width="2" stroke-linecap="round"/><g class="mcrank"><circle cx="38.5" cy="25.5" r="2.4" fill="var(--art-gold)"/></g><g class="mlid"><rect x="3" y="14" width="34" height="7" rx="2" fill="#B07A45"/><circle cx="20" cy="21" r="1.8" fill="var(--art-gold)"/></g><g class="mnote"><path d="M30 12V5L34 4" fill="none" stroke="var(--art-gold)" stroke-width="1.6" stroke-linecap="round"/><circle cx="28.6" cy="12.4" r="2.2" fill="var(--art-gold)"/></g></svg></button>
+  
   <div class="lights" id="lights" aria-hidden="true"></div>
   <div class="plugwrap"><span class="plublab hand" id="themeLab" aria-hidden="true">Plug in the lights</span>
     <button class="plug" id="themeBtn" type="button" aria-pressed="false" aria-label="Plug in the lights for night mode">
@@ -290,6 +293,7 @@ body.has-dock{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   <span class="hand">Santa’s got receipts.</span>
   <p>🎄 🎁 🔔 🧦 🍪 ☕</p>
   <p>Secret Santa assignments are a mystery. They are not on this site.</p>
+  <div class="musicwrap"><button class="mus" id="musBtn" type="button" aria-pressed="false" aria-label="Play Christmas music"><svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><g class="mdancer"><circle cx="20" cy="8" r="2.6" fill="#F2C9A0"/><path d="M20 11L14.5 19H25.5Z" fill="#F7A8C4"/></g><rect x="5" y="19" width="30" height="16" rx="3" fill="#8A5A32"/><rect x="5" y="19" width="30" height="3.5" fill="#6B4226"/><path d="M35 29H37.5" stroke="var(--art-gold)" stroke-width="2" stroke-linecap="round"/><g class="mcrank"><circle cx="38.5" cy="25.5" r="2.4" fill="var(--art-gold)"/></g><g class="mlid"><rect x="3" y="14" width="34" height="7" rx="2" fill="#B07A45"/><circle cx="20" cy="21" r="1.8" fill="var(--art-gold)"/></g><g class="mnote"><path d="M30 12V5L34 4" fill="none" stroke="var(--art-gold)" stroke-width="1.6" stroke-linecap="round"/><circle cx="28.6" cy="12.4" r="2.2" fill="var(--art-gold)"/></g></svg></button><span class="hand musiclab" id="musLab">Tap the music box for Christmas music</span></div>
 </footer>
 <nav class="dock" id="dock" aria-label="Jump to a section" hidden></nav>
 
@@ -636,6 +640,7 @@ var Music = (function(){
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     btn.setAttribute('aria-label', on ? 'Mute Christmas music' : 'Play Christmas music');
+    var ml = document.getElementById('musLab'); if (ml) ml.textContent = on ? 'Music playing. Tap to mute.' : 'Tap the music box for Christmas music';
   }
   function note(f, t, d){
     var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
